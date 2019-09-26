@@ -5,16 +5,17 @@ class TasksController < ApplicationController
   end
 
   def new
-
+    @task = Task.new
   end
 
   def create
-    task = Task.new({
-      title: params[:task][:title],
-      description: params[:task][:description]
-      })
-      task.save
+    @task = Task.new(task_params)
+
+    if @task.save
       redirect_to '/tasks'
+    else
+      render 'new'
+    end
   end
 
   def show
@@ -26,18 +27,23 @@ class TasksController < ApplicationController
   end
 
   def update
-    task = Task.find(params[:id])
-    task.update({
-      title: params[:task][:title],
-      description: params[:task][:description]
-      })
-    task.save
-    redirect_to "/tasks/#{task.id}"
+    @task = Task.find(params[:id])
+
+    if @task.update(task_params)
+      redirect_to "/tasks/#{@task.id}"
+    else
+      render 'edit'
+    end
   end
 
   def destroy
-    Task.destroy(params[:id])
+    @task = Task.find(params[:id])
+    @task.destroy
     redirect_to '/tasks'
+  end
+
+  private def task_params
+    params.require(:task).permit(:title, :description)
   end
 
 end

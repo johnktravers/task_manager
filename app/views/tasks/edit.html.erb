@@ -1,8 +1,19 @@
 <form action="/tasks/<%= @task.id %>" method="post">
-  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
   <input type="hidden" name="_method" value="PATCH" />
-  <p>Edit</p>
-  <input type="text" name='task[title]' value="<% @task.title %>" /><br />
-  <textarea name='task[description]'><%= @task.description %></textarea><br />
-  <input type='submit' />
+  <h2>Edit Task</h2><br />
+
+  <% if @task.errors.any? %>
+  <% @task.errors.full_messages.each do |msg| %>
+  <div class="alert alert-danger"><%= msg %></div>
+  <% end %>
+  <% end %>
+
+  <p>Task title:</p>
+  <input type="text" name='task[title]' class="form-control" /><br />
+
+  <p>Task description:</p>
+  <textarea name='task[description]' class="form-control"></textarea><br />
+
+  <input type='submit' class="btn btn-primary" />
 </form>
